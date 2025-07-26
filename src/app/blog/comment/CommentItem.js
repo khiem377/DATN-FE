@@ -8,7 +8,7 @@ import ReactionButton from './ReactionButton';
 import ReplyItem from './ReplyItem';
 import UserAvatar from './UserAvatar';
 
-const CommentItem = ({ comment, onReply, onCommentUpdate, onCommentDelete, currentUserId }) => {
+const CommentItem = ({ comment, onCommentUpdate, onCommentDelete, currentUserId }) => {
     const [replies, setReplies] = useState([]);
     const [showReplies, setShowReplies] = useState(false);
     const [loadingReplies, setLoadingReplies] = useState(false);
@@ -459,7 +459,7 @@ const CommentItem = ({ comment, onReply, onCommentUpdate, onCommentDelete, curre
                                     onMouseEnter={(e) => (e.target.style.backgroundColor = '#e4e6ea')}
                                     onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
                                 >
-                                    ""
+                                  &quot;&quot;
                                 </button>
                                 <button
                                     style={{
@@ -831,7 +831,7 @@ const CommentItem = ({ comment, onReply, onCommentUpdate, onCommentDelete, curre
                                             onMouseEnter={(e) => (e.target.style.backgroundColor = '#e4e6ea')}
                                             onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
                                         >
-                                            ""
+                                            &quot;&quot;
                                         </button>
                                         <button
                                             style={{

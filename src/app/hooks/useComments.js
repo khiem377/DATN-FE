@@ -18,7 +18,7 @@ export const useComments = (postId) => {
             if (data.success) {
                 setComments(data.data);
             }
-        } catch (error) {
+        } catch {
             message.error('Không thể tải bình luận');
         } finally {
             setLoading(false);
@@ -52,7 +52,7 @@ export const useComments = (postId) => {
             } else {
                 throw new Error(data.message || 'Lỗi khi gửi bình luận');
             }
-        } catch (error) {
+        } catch  {
             toast.error('Vui lòng đăng nhập để bình luận');
             // setTimeout(()=>{
             //     router.push('/login')
@@ -65,7 +65,7 @@ export const useComments = (postId) => {
 
     useEffect(() => {
         if (postId) fetchComments();
-    }, [postId]);
+    }, [postId,fetchComments]);
 
     return {
         comments,

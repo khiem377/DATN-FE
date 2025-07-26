@@ -30,7 +30,7 @@ const CommentEditor = ({
         >
             <ToolbarButton icon={<BoldOutlined />} title="Bold" />
             <ToolbarButton icon={<ItalicOutlined />} title="Italic" />
-            <ToolbarButton icon={<span style={{ fontFamily: 'monospace' }}>"</span>} title="Quote" />
+            <ToolbarButton icon={<span style={{ fontFamily: 'monospace' }}></span>} title="Quote" />
             <ToolbarButton icon={<CodeOutlined />} title="Code" />
             <ToolbarButton icon={<span style={{ fontFamily: 'monospace' }}>&lt;/&gt;</span>} title="HTML" />
             <ToolbarButton icon={<PictureOutlined />} title="Image" />

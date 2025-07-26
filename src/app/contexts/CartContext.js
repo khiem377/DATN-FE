@@ -1,12 +1,10 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { message } from 'antd';
-import { useRouter } from 'next/navigation';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const router = useRouter();
   const [cartData, setCartData] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [updatingItems, setUpdatingItems] = useState(new Set());
@@ -125,7 +123,7 @@ export const CartProvider = ({ children }) => {
       fetchingRef.current = false;
       if (showLoading) setLoading(false);
     }
-  }, [router]);
+  }, []);
 
   // Add to cart
   const addToCart = useCallback(async (bookId, quantity = 1) => {
@@ -193,7 +191,7 @@ export const CartProvider = ({ children }) => {
       message.error('Lỗi khi thêm vào giỏ hàng');
       return false;
     }
-  }, [router, fetchCartData]);
+  }, [fetchCartData]);
 
   const updateItemQuantity = useCallback(async (itemId, newQuantity) => {
     if (newQuantity < 1) return;
@@ -296,7 +294,7 @@ export const CartProvider = ({ children }) => {
       message.error('Lỗi khi xóa sản phẩm');
       fetchCartData(false);
     }
-  }, []);
+  }, [fetchCartData]);
 
   // ✅ THÊM FUNCTION CLEARCART
   const clearCart = useCallback(async () => {

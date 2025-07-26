@@ -6,7 +6,7 @@ export const useUser = () => {
 
     const { data, error, isLoading, mutate } = useSWR(
         token ? ['user-info', token] : null,
-        async ([_, token]) => {
+        async ([token]) => {
             const response = await apiGetMe(token);
             return response;
         },

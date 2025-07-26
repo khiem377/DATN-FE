@@ -40,7 +40,6 @@ const ReactionButton = ({
     reactionStyle = {},
     reactionSummary = {},
     reactions = null,
-    refreshStrategy, // Thêm refreshStrategy prop
     onReactionUpdate,
 }) => {
     const [currentUserReaction, setCurrentUserReaction] = useState(null);
@@ -78,7 +77,7 @@ const ReactionButton = ({
     const postId = localStorage.getItem('postid');
 
     console.log(postId);
-    const handleReactionSuccess = async (itemId, reactionType) => {
+    const handleReactionSuccess = async (itemId) => {
         try {
             const token = localStorage.getItem('token');
             const headers = {
