@@ -5,7 +5,7 @@ import { Button, Card, Typography, message } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { apiAddToCart } from '../../../../apis/cart'; // 👈 THÊM IMPORT NÀY
+import { apiAddToCart } from '../../../../apis/cart';
 import { apiGetMe } from '../../../../apis/user';
 import { handleAddToCartHelper } from '../../utils/addToCartHandler';
 import './OnlinePromotion.css';
@@ -22,11 +22,9 @@ const OnlinePromotion = () => {
     const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     const [displayedBooks, setDisplayedBooks] = useState([]);
 
-    // state bổ sung
     const [user, setUser] = useState(null);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-    // lấy danh sách sự kiện
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -42,7 +40,6 @@ const OnlinePromotion = () => {
         fetchEvents();
     }, []);
 
-    // lấy user
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) return;
@@ -60,7 +57,6 @@ const OnlinePromotion = () => {
         getUserInfo();
     }, []);
 
-    // thêm vào giỏ
     const handleAddToCart = async (book, qty = 1) => {
         try {
             if (!user) {
@@ -69,11 +65,24 @@ const OnlinePromotion = () => {
                 return;
             }
 
+            // Tính giá cuối cùng (ưu tiên giá khuyến mãi nếu có)
+            const finalPrice = getFinalPriceForCart(book.price, book.discount_price);
+
+            console.log('Adding to cart with price:', {
+                bookId: book.id,
+                bookTitle: book.title,
+                originalPrice: book.price,
+                discountPrice: book.discount_price,
+                finalPrice: finalPrice,
+                quantity: qty,
+            });
+
             await handleAddToCartHelper({
                 user,
                 bookId: book.id,
                 quantity: qty,
-                addToCart: apiAddToCart, // 👈 giờ đã có
+                price: finalPrice,
+                addToCart: apiAddToCart, // Đảm bảo signature đúng: (token, bookId, quantity, price)
                 setIsAddingToCart,
                 router,
             });
@@ -83,7 +92,6 @@ const OnlinePromotion = () => {
         }
     };
 
-    // phân loại sự kiện
     const categorizeEvents = (eventsData) => {
         const now = new Date();
         const current = [];
@@ -137,7 +145,6 @@ const OnlinePromotion = () => {
         }
     };
 
-    // countdown
     useEffect(() => {
         let timer;
 
@@ -181,14 +188,55 @@ const OnlinePromotion = () => {
         }
     };
 
-    const calculateDiscountedPrice = (price, discount) => {
-        const p = Number(price) || 0;
-        const d = Number(discount) || 0;
-        const amount = p * (d / 100);
-        return Math.max(0, p - amount);
+    // ---------- Helpers xử lý giá/giảm (FIXED) ----------
+    const toNum = (v) => {
+        if (v === null || v === undefined || v === '') return 0;
+        const n = Number(v);
+        return Number.isFinite(n) ? n : 0;
     };
 
-    const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(Number(price) || 0) + 'đ';
+    const hasDiscount = (price, discountPrice) => {
+        const p = toNum(price);
+        const dp = toNum(discountPrice);
+
+        // Có giảm giá khi: giá gốc > 0, giá giảm > 0 và giá giảm < giá gốc
+        return p > 0 && dp > 0 && dp < p;
+    };
+
+    const getDiscountPercent = (price, discountPrice) => {
+        if (!hasDiscount(price, discountPrice)) return 0;
+        const p = toNum(price);
+        const dp = toNum(discountPrice);
+        return Math.round(((p - dp) / p) * 100);
+    };
+
+    // Giá hiển thị cho UI
+    const getDisplayPrice = (price, discountPrice) => {
+        return hasDiscount(price, discountPrice) ? toNum(discountPrice) : toNum(price);
+    };
+
+    // FIX: Giá chính xác để thêm vào giỏ hàng
+    const getFinalPriceForCart = (price, discountPrice) => {
+        const originalPrice = parseFloat(price) || 0;
+        const discountedPrice = parseFloat(discountPrice) || 0;
+
+        console.log('getFinalPriceForCart debug:', {
+            price,
+            discountPrice,
+            originalPrice,
+            discountedPrice,
+            hasValidDiscount: discountedPrice > 0 && discountedPrice < originalPrice,
+        });
+
+        // Nếu có discount_price và nó nhỏ hơn price thì dùng discount_price
+        // Ngược lại dùng price
+        if (discountedPrice > 0 && discountedPrice < originalPrice) {
+            return discountedPrice;
+        }
+        return originalPrice;
+    };
+
+    const formatPrice = (price) => new Intl.NumberFormat('vi-VN').format(toNum(price)) + 'đ';
 
     const formatDateRange = (startDate, endDate) => {
         const start = new Date(startDate);
@@ -258,55 +306,62 @@ const OnlinePromotion = () => {
 
                 <div className="books-grid">
                     {displayedBooks.length > 0 ? (
-                        displayedBooks.map((book) => (
-                            <div key={book.id} className="book-grid-item">
-                                <Card className="book-card">
-                                    <div className="book-image-container">
-                                        <img
-                                            src={book?.thumb || 'https://via.placeholder.com/300x400?text=No+Image'}
-                                            alt={book?.title || 'Book'}
-                                            className="book-image"
-                                            onError={(e) => {
-                                                e.currentTarget.src =
-                                                    'https://via.placeholder.com/300x400?text=No+Image';
-                                            }}
-                                        />
+                        displayedBooks.map((book) => {
+                            const showDiscount = hasDiscount(book.price, book.discount_price);
+                            const percent = getDiscountPercent(book.price, book.discount_price);
+                            const displayPrice = getDisplayPrice(book.price, book.discount_price);
 
-                                        <div className="discount-badge">
-                                            ưu đãi đến {Math.round(Number(book.discount_percent) || 0)}%
-                                        </div>
-
-                                        <div className="book-actions">
-                                            <Button
-                                                onClick={() => handleAddToCart(book, 1)}
-                                                type="text"
-                                                icon={<ShoppingCartOutlined />}
-                                                className="cart-btn"
-                                                loading={isAddingToCart}
+                            return (
+                                <div key={book.id} className="book-grid-item">
+                                    <Card className="book-card">
+                                        <div className="book-image-container">
+                                            <img
+                                                src={book?.thumb || 'https://via.placeholder.com/300x400?text=No+Image'}
+                                                alt={book?.title || 'Book'}
+                                                className="book-image"
+                                                onError={(e) => {
+                                                    e.currentTarget.src =
+                                                        'https://via.placeholder.com/300x400?text=No+Image';
+                                                }}
                                             />
+
+                                            {showDiscount && (
+                                                <div className="discount-badge">ưu đãi đến {percent}%</div>
+                                            )}
+
+                                            <div className="book-actions">
+                                                <Button
+                                                    onClick={() => handleAddToCart(book, 1)}
+                                                    type="text"
+                                                    icon={<ShoppingCartOutlined />}
+                                                    className="cart-btn"
+                                                    loading={isAddingToCart}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="book-info" onClick={() => router.push(`/book/${book.id}`)}>
-                                        <h3 className="book-title">{book.title}</h3>
-                                        {/* <span className="book-author">Số lượng: {book.quantity_limit}</span>
-                                        <span className="book-author">Đã bán: {book.sold_quantity}</span> */}
+                                        <div className="book-info" onClick={() => router.push(`/book/${book.id}`)}>
+                                            <h3 className="book-title">{book.title}</h3>
 
-                                        <div className="price-container">
-                                            <span className="current-price">
-                                                {formatPrice(
-                                                    calculateDiscountedPrice(book.price, book.discount_percent),
+                                            <div className="price-container">
+                                                {/* Giá hiển thị chính */}
+                                                <span className="current-price">{formatPrice(displayPrice)}</span>
+
+                                                {/* Chỉ hiện giá gạch & % khi thực sự có giảm */}
+                                                {showDiscount && (
+                                                    <>
+                                                        <span className="original-price">
+                                                            {formatPrice(book.price)}
+                                                        </span>
+                                                        <span className="discount-price">-{percent}%</span>
+                                                    </>
                                                 )}
-                                            </span>
-                                            <span className="original-price">{formatPrice(book.price)}</span>
-                                            <span className="discount-price">
-                                                -{Number(book.discount_percent) || 0}%
-                                            </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Card>
-                            </div>
-                        ))
+                                    </Card>
+                                </div>
+                            );
+                        })
                     ) : (
                         <div className="no-books-message">
                             <p>Không có sách nào trong sự kiện này.</p>

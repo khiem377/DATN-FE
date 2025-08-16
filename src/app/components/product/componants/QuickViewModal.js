@@ -61,6 +61,7 @@ export function QuickViewModal({
             setIsAddingToCart,
             router: null,
         });
+        console.log('hihi', handleAddToCart);
     };
 
     const discount = calculateDiscount(book.price, book.discount_price);

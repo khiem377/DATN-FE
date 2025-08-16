@@ -36,6 +36,8 @@ const CartItem = memo(({ item, isSelected, onSelect, onUpdateQuantity, onRemove,
         [item.id, item.quantity, onUpdateQuantity],
     );
 
+    console.log('itemqưeqwe', item);
+
     const handleSelect = useCallback(
         (e) => {
             console.log('Item selected:', item.id, e.target.checked);
@@ -53,11 +55,6 @@ const CartItem = memo(({ item, isSelected, onSelect, onUpdateQuantity, onRemove,
     // Tính giá sau khi áp dụng mã giảm giá
     const calculateDiscountedPrice = useCallback(
         (originalPrice) => {
-            console.log('=== CALCULATING DISCOUNTED PRICE ===');
-            console.log('Original Price:', originalPrice);
-            console.log('Applied Coupon:', appliedCoupon);
-            console.log('Item Book ID:', item.book.id);
-
             if (!appliedCoupon) {
                 console.log('No coupon applied');
                 return originalPrice;
@@ -126,13 +123,29 @@ const CartItem = memo(({ item, isSelected, onSelect, onUpdateQuantity, onRemove,
         [appliedCoupon, item.book.id],
     );
 
-    const originalPrice = parseFloat(item.book.price);
+    // ✅ Sửa logic lấy giá: nếu discount_price là 0.00 thì lấy price
+    const originalPrice = useMemo(() => {
+        const discountPrice = parseFloat(item?.book.discount_price) || 0;
+        const regularPrice = parseFloat(item?.book.price) || 0;
+
+        // Nếu discount_price là 0 hoặc không tồn tại, dùng price
+        if (discountPrice === 0) {
+            console.log(`Using regular price for item ${item.id}: ${regularPrice}`);
+            return regularPrice;
+        }
+
+        console.log(`Using discount price for item ${item.id}: ${discountPrice}`);
+        return discountPrice;
+    }, [item?.book.discount_price, item?.book.price, item.id]);
+
     const discountedPrice = calculateDiscountedPrice(originalPrice);
     const hasDiscount = discountedPrice < originalPrice;
 
     console.log('=== ITEM RENDER INFO ===');
     console.log('Item ID:', item.id, 'Book ID:', item.book.id);
-    console.log('Original Price:', originalPrice);
+    console.log('Book discount_price:', item?.book.discount_price);
+    console.log('Book price:', item?.book.price);
+    console.log('Original Price (calculated):', originalPrice);
     console.log('Discounted Price:', discountedPrice);
     console.log('Has Discount:', hasDiscount);
     console.log('Applied Coupon in render:', appliedCoupon);
@@ -591,7 +604,16 @@ const Cart = () => {
         return safeSelectedItems.length > 0 && safeSelectedItems.length < (cartData?.items?.length || 0);
     }, [safeSelectedItems.length, cartData?.items?.length]);
 
-    // Tính tổng tiền sau khi áp dụng mã giảm giá
+    // ✅ Sửa helper function để lấy giá đúng
+    const getItemPrice = useCallback((item) => {
+        const discountPrice = parseFloat(item?.book.discount_price) || 0;
+        const regularPrice = parseFloat(item?.book.price) || 0;
+
+        // Nếu discount_price là 0 hoặc không tồn tại, dùng price
+        return discountPrice === 0 ? regularPrice : discountPrice;
+    }, []);
+
+    // ✅ Sửa tính tổng tiền sau khi áp dụng mã giảm giá
     const calculateSelectedTotalWithCoupon = useCallback(
         (coupon = appliedCoupon) => {
             if (!cartData || !safeSelectedItems.length) return 0;
@@ -599,7 +621,7 @@ const Cart = () => {
             return cartData.items
                 .filter((item) => safeSelectedItems.includes(item.id))
                 .reduce((total, item) => {
-                    const originalPrice = parseFloat(item.book.price) || 0;
+                    const originalPrice = getItemPrice(item); // ✅ Sử dụng helper function
                     let finalPrice = originalPrice;
 
                     // ✅ Áp dụng giảm giá nếu có coupon
@@ -627,20 +649,20 @@ const Cart = () => {
                     return total + finalPrice * item.quantity;
                 }, 0);
         },
-        [cartData, safeSelectedItems, appliedCoupon],
+        [cartData, safeSelectedItems, appliedCoupon, getItemPrice],
     );
 
-    // Tính tổng tiền gốc (trước khi giảm giá)
+    // ✅ Sửa tính tổng tiền gốc (trước khi giảm giá)
     const calculateOriginalTotal = useCallback(() => {
         if (!cartData || !safeSelectedItems.length) return 0;
 
         return cartData.items
             .filter((item) => safeSelectedItems.includes(item.id))
             .reduce((total, item) => {
-                const price = parseFloat(item.book.price) || 0;
+                const price = getItemPrice(item); // ✅ Sử dụng helper function
                 return total + price * item.quantity;
             }, 0);
-    }, [cartData, safeSelectedItems]);
+    }, [cartData, safeSelectedItems, getItemPrice]);
 
     const totalAmount = useMemo(() => {
         return calculateSelectedTotalWithCoupon().toLocaleString('vi-VN');

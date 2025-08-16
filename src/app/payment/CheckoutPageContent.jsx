@@ -327,7 +327,7 @@ const CheckoutPageContent = () => {
                 } else {
                     throw new Error(result.message || 'Đặt hàng thất bại');
                 }
-            } else if (paymentMethod === 'qr') {
+            } else if (paymentMethod === 'credit_card') {
                 console.log('🛒 [ZALOPAY] Starting ZaloPay payment flow');
 
                 const cartStateBeforePayment = {
@@ -859,7 +859,7 @@ const CheckoutPageContent = () => {
                                         </Radio>
                                     </div>
                                     <div className="payment-option">
-                                        <Radio value="qr" className="payment-radio">
+                                        <Radio value="credit_card" className="payment-radio">
                                             <div className="payment-content">
                                                 <QrcodeOutlined className="payment-icon" />
                                                 <div>

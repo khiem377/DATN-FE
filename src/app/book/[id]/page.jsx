@@ -1538,9 +1538,40 @@ const BookDetailPage = () => {
                             {/* Price - chỉ hiển thị nếu là sách giấy */}
                             {book.is_physical === 1 && (
                                 <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-                                    <Text style={{ fontSize: '24px', fontWeight: 'bold', color: 'red' }}>
-                                        {formatPrice(book.price)} VND
-                                    </Text>
+                                    {Number(book.discount_price) > 0 &&
+                                    Number(book.discount_price) < Number(book.price) ? (
+                                        <>
+                                            <Text
+                                                style={{
+                                                    fontSize: '20px',
+                                                    textDecoration: 'line-through',
+                                                    color: '#888',
+                                                    marginRight: '8px',
+                                                }}
+                                            >
+                                                {formatPrice(book.price)} VND
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: '24px',
+                                                    fontWeight: 'bold',
+                                                    color: 'red',
+                                                }}
+                                            >
+                                                {formatPrice(book.discount_price)} VND
+                                            </Text>
+                                        </>
+                                    ) : (
+                                        <Text
+                                            style={{
+                                                fontSize: '24px',
+                                                fontWeight: 'bold',
+                                                color: 'red',
+                                            }}
+                                        >
+                                            {formatPrice(book.price)} VND
+                                        </Text>
+                                    )}
                                 </div>
                             )}
 

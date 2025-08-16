@@ -1,40 +1,44 @@
 import { toast } from 'react-toastify';
 
-export const apiAddToCart = async (bookId, quantity) => {
+export const apiAddToCart = async (bookId, quantity, price = null) => {
+    const token = localStorage?.getItem('token');
     try {
-        const token = localStorage.getItem('token');
+        const body = {
+            book_id: bookId,
+            quantity: quantity,
+        };
+
+        // Chỉ thêm price vào body nếu có giá trị
+        if (price !== null && price > 0) {
+            body.price = price;
+        }
+
         const response = await fetch('https://smartbook.io.vn/api/cart/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({
-                book_id: bookId,
-                quantity: quantity,
-            }),
+            body: JSON.stringify(body),
         });
 
         const data = await response.json();
-
-        if (!response.ok || data.success === false) {
-            toast.error(data.message || `HTTP error! status: ${response.status}`);
-            return {
-                success: false,
-                error: data.message || `HTTP error! status: ${response.status}`,
-            };
+        if (data.success === true) {
+            toast.success('Thêm vào giỏ hàng thành công');
+        } else {
+            toast.error(data?.message);
         }
 
         return {
-            success: true,
-            data,
+            status: data.success,
+            message: data.message,
+            data: data.data,
         };
     } catch (error) {
-        console.error('Lỗi khi thêm vào giỏ hàng:', error);
-        toast.error(error.message || 'Có lỗi xảy ra khi thêm vào giỏ hàng');
+        console.error('Error adding to cart:', error);
         return {
-            success: false,
-            error: error.message,
+            status: false,
+            message: 'Lỗi kết nối mạng',
         };
     }
 };
