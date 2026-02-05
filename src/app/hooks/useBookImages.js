@@ -4,7 +4,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export const useBookImages = (bookId) => {
     const { data, error, isLoading } = useSWR(
-        bookId ? `https://smartbook.io.vn/api/books/${bookId}/images` : null,
+        bookId ? `http://localhost:8000/api/books/${bookId}/images` : null,
         fetcher,
         {
             revalidateOnFocus: false,

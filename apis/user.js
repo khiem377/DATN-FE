@@ -46,7 +46,6 @@ export const apiRegisterUser = async (name, email, password, password_confirmati
     return res.data;
 };
 
-
 export const apiForgotPassword = async (email) => {
     try {
         const response = await axios.post(`${BASE_URL}/forgot-password`, {
@@ -88,7 +87,7 @@ export const apiResetPassword = async ({ email, token, password, password_confir
     }
 };
 
-const BASE_URL = 'https://smartbook.io.vn/api';
+const BASE_URL = 'http://localhost:8000/api';
 
 export const apiSearchBooks = async (params = {}) => {
     try {

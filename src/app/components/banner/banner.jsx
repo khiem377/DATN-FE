@@ -3,7 +3,7 @@ import VoyageSliderClient from './VoyageSliderClient';
 export default async function VoyageSlider() {
     let banners = [];
     try {
-        const res = await fetch('https://smartbook.io.vn/api/banners/get', {
+        const res = await fetch('http://localhost:8000/api/banners/get', {
             cache: 'no-store',
         });
 

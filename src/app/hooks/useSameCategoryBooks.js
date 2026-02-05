@@ -22,7 +22,7 @@ export const useSameCategoryBooks = (category, currentBookId) => {
     if (category && category !== 'Không rõ') {
         if (typeof category === 'string') {
             // Nếu là string thì search theo name
-            searchUrl = `https://smartbook.io.vn/api/books/search?category=${encodeURIComponent(category)}`;
+            searchUrl = `http://localhost:8000/api/books/search?category=${encodeURIComponent(category)}`;
         } else if (typeof category === 'object') {
             // Nếu là object thì ưu tiên ID, fallback về name
             const categoryId = category._id || category.id;
@@ -30,10 +30,10 @@ export const useSameCategoryBooks = (category, currentBookId) => {
 
             if (categoryId) {
                 // Thử search theo ID trước
-                searchUrl = `https://smartbook.io.vn/api/books/search?category=${encodeURIComponent(categoryId)}`;
+                searchUrl = `http://localhost:8000/api/books/search?category=${encodeURIComponent(categoryId)}`;
             } else if (categoryName) {
                 // Fallback về name
-                searchUrl = `https://smartbook.io.vn/api/books/search?category=${encodeURIComponent(categoryName)}`;
+                searchUrl = `http://localhost:8000/api/books/search?category=${encodeURIComponent(categoryName)}`;
             }
         }
     }

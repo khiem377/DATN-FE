@@ -11,7 +11,7 @@ const useReplies = (parentId) => {
         if (!showReplies && replies.length === 0) {
             setLoading(true);
             try {
-                const res = await fetch(`https://smartbook.io.vn/api/comments/replies?parent_id=${parentId}`, {
+                const res = await fetch(`http://localhost:8000/api/comments/replies?parent_id=${parentId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

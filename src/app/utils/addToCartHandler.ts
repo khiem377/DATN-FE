@@ -59,7 +59,7 @@ export const toggleWishlist = async ({ bookId, token, wishlist, setWishlist }: T
         const isCurrentlyFavorited = wishlist.includes(bookId);
         const endpoint = isCurrentlyFavorited ? 'unfollow' : 'follow';
 
-        const response = await fetch(`https://smartbook.io.vn/api/books/${endpoint}`, {
+        const response = await fetch(`http://localhost:8000/api/books/${endpoint}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -179,7 +179,7 @@ const CartGroup = () => {
         }
 
         try {
-            const res = await fetch('https://smartbook.io.vn/api/me', {
+            const res = await fetch('http://localhost:8000/api/me', {
                 method: 'GET',
                 headers: getAuthHeaders(),
                 credentials: 'include',

@@ -19,7 +19,7 @@ const RunningBookBanner = () => {
         const fetchRandomBook = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch('https://smartbook.io.vn/api/books/search?limit=500');
+                const response = await fetch('http://localhost:8000/api/books/search?limit=500');
                 const data = await response.json();
 
                 if (data.status === 'success' && data.data && data.data.length > 0) {

@@ -32,7 +32,7 @@ export function BookStoreClient({ initialBooks }) {
                     if (userResponse?.status === true) {
                         setUser(userResponse.user);
                     }
-                    const followedRes = await fetch('https://smartbook.io.vn/api/books/followed', {
+                    const followedRes = await fetch('http://localhost:8000/api/books/followed', {
                         headers: { Authorization: `Bearer ${token}` },
                     });
                     const followedData = await followedRes.json();

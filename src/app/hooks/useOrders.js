@@ -3,7 +3,7 @@ import axios from 'axios';
 import useSWR from 'swr';
 
 const fetchOrders = async (token) => {
-    const response = await axios.get('https://smartbook.io.vn/api/orders', {
+    const response = await axios.get('http://localhost:8000/api/orders', {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -12,7 +12,7 @@ const fetchOrders = async (token) => {
 };
 
 const fetchOrderDetail = async (id, token) => {
-    const response = await axios.get(`https://smartbook.io.vn/api/orders/${id}`, {
+    const response = await axios.get(`http://localhost:8000/api/orders/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -36,7 +36,7 @@ export const useOrders = (token, enabled = false) => {
     const cancelOrder = async (id) => {
         try {
             await axios.post(
-                `https://smartbook.io.vn/api/orders/${id}/cancel`,
+                `http://localhost:8000/api/orders/${id}/cancel`,
                 {},
                 {
                     headers: {

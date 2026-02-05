@@ -124,7 +124,7 @@ export default function PersonalInfo({ user, token, mutateUser }) {
                 });
                 fd.append('avatar', avatarFile);
 
-                res = await fetch('https://smartbook.io.vn/api/user/profile', {
+                res = await fetch('http://localhost:8000/api/user/profile', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -133,7 +133,7 @@ export default function PersonalInfo({ user, token, mutateUser }) {
                     body: fd,
                 });
             } else {
-                res = await fetch('https://smartbook.io.vn/api/user/profile', {
+                res = await fetch('http://localhost:8000/api/user/profile', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ export const useProfile = (user, token) => {
 
     const handleSubmit = async () => {
         try {
-            const res = await fetch('https://smartbook.io.vn/api/user/profile', {
+            const res = await fetch('http://localhost:8000/api/user/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

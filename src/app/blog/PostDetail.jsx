@@ -23,7 +23,7 @@ const PostDetail = ({ slug, onBack }) => {
     const fetchPostDetail = async (postSlug) => {
         setLoading(true);
         try {
-            const response = await fetch(`https://smartbook.io.vn/api/posts/${postSlug}`);
+            const response = await fetch(`http://localhost:8000/api/posts/${postSlug}`);
             const result = await response.json();
 
             if (result.success) {
@@ -47,7 +47,7 @@ const PostDetail = ({ slug, onBack }) => {
         if (!token) return;
 
         try {
-            const response = await fetch('https://smartbook.io.vn/api/posts/liked', {
+            const response = await fetch('http://localhost:8000/api/posts/liked', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -71,7 +71,7 @@ const PostDetail = ({ slug, onBack }) => {
 
     const fetchRelatedPosts = async (topicIds, currentPostId) => {
         try {
-            const res = await fetch(`https://smartbook.io.vn/api/posts/related/${topicIds}`);
+            const res = await fetch(`http://localhost:8000/api/posts/related/${topicIds}`);
             const result = await res.json();
             if (result.success) {
                 const filtered = result.data.filter((item) => item.id !== currentPostId); // chính xác 100%
@@ -92,7 +92,7 @@ const PostDetail = ({ slug, onBack }) => {
         }
 
         const isLiked = post.has_liked;
-        const url = `https://smartbook.io.vn/api/posts/${post.id}/${isLiked ? 'unlike' : 'like'}`;
+        const url = `http://localhost:8000/api/posts/${post.id}/${isLiked ? 'unlike' : 'like'}`;
         const method = isLiked ? 'DELETE' : 'POST';
 
         try {

@@ -22,7 +22,7 @@ export const useSameAuthorBooks = (author, currentBookId) => {
     if (author) {
         if (typeof author === 'string') {
             // Nếu là string thì search theo name
-            searchUrl = `https://smartbook.io.vn/api/books/search?author=${encodeURIComponent(author)}`;
+            searchUrl = `http://localhost:8000/api/books/search?author=${encodeURIComponent(author)}`;
         } else if (typeof author === 'object') {
             // Nếu là object thì ưu tiên ID, fallback về name
             const authorId = author._id || author.id;
@@ -30,10 +30,10 @@ export const useSameAuthorBooks = (author, currentBookId) => {
 
             if (authorId) {
                 // Thử search theo ID trước
-                searchUrl = `https://smartbook.io.vn/api/books/search?author=${encodeURIComponent(authorId)}`;
+                searchUrl = `http://localhost:8000/api/books/search?author=${encodeURIComponent(authorId)}`;
             } else if (authorName) {
                 // Fallback về name
-                searchUrl = `https://smartbook.io.vn/api/books/search?author=${encodeURIComponent(authorName)}`;
+                searchUrl = `http://localhost:8000/api/books/search?author=${encodeURIComponent(authorName)}`;
             }
         }
     }

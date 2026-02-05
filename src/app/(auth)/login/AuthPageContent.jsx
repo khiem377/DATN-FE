@@ -76,7 +76,7 @@ const handleGoogleLogin = () => {
     localStorage.setItem('redirect_after_login', '/');
     const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 'http://localhost:3000';
     const apiUrl = `${
-        process.env.NEXT_PUBLIC_API_URL || 'https://smartbook.io.vn'
+        process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     }/api/login/google?frontend_url=${encodeURIComponent(frontendUrl)}`;
     window.location.href = apiUrl;
 };

@@ -29,7 +29,7 @@ const OnlinePromotion = () => {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const res = await fetch('https://smartbook.io.vn/api/events');
+                const res = await fetch('http://localhost:8000/api/events');
                 const data = await res.json();
                 setEvents(data);
                 categorizeEvents(data);

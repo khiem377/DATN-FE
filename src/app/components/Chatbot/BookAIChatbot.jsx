@@ -21,7 +21,7 @@ const SmartBookChatbot = () => {
     const chatContainerRef = useRef(null);
 
     // API configuration
-    const API_BASE = 'https://smartbook.io.vn/api';
+    const API_BASE = 'http://localhost:8000/api';
     const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyDhZbONQYp7sPTaq_Wv83qRrQo3_FYCZhs';
 
     // Load chat from localStorage on component mount

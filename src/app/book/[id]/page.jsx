@@ -84,7 +84,7 @@ const useBookChapters = (bookId) => {
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch(`https://smartbook.io.vn/api/admin/books/${bookId}/chapters`);
+                const response = await fetch(`http://localhost:8000/api/admin/books/${bookId}/chapters`);
                 const data = await response.json();
 
                 if (data.success) {
@@ -759,7 +759,7 @@ const BookDetailPage = () => {
         if (!book?.id) return;
         try {
             setIsOpeningChapter(true);
-            const res = await fetch(`https://smartbook.io.vn/api/admin/books/${book.id}/chapters`);
+            const res = await fetch(`http://localhost:8000/api/admin/books/${book.id}/chapters`);
             const json = await res.json();
 
             if (!json?.success || !Array.isArray(json?.chapters) || json.chapters.length === 0) {

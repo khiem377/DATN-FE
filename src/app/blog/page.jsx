@@ -121,7 +121,7 @@ const CoffeeBlogInterface = () => {
 
     const fetchPinnedPosts = async () => {
         try {
-            const res = await fetchWithAuth('https://smartbook.io.vn/api/posts/pinned');
+            const res = await fetchWithAuth('http://localhost:8000/api/posts/pinned');
             const result = await res.json();
             if (result.success) {
                 setPinnedPosts(result.data);
@@ -133,7 +133,7 @@ const CoffeeBlogInterface = () => {
 
     const fetchPopularPosts = async () => {
         try {
-            const res = await fetchWithAuth('https://smartbook.io.vn/api/posts/popular');
+            const res = await fetchWithAuth('http://localhost:8000/api/posts/popular');
             const result = await res.json();
             if (result.success) {
                 setPopularPosts(result.data);
@@ -145,7 +145,7 @@ const CoffeeBlogInterface = () => {
 
     const fetchAllPosts = async () => {
         try {
-            const res = await fetchWithAuth('https://smartbook.io.vn/api/posts?per_page=50');
+            const res = await fetchWithAuth('http://localhost:8000/api/posts?per_page=50');
             const result = await res.json();
             if (result.success) {
                 setAllPosts(result.data);
@@ -157,7 +157,7 @@ const CoffeeBlogInterface = () => {
 
     const fetchRecentPosts = async () => {
         try {
-            const res = await fetchWithAuth('https://smartbook.io.vn/api/posts?per_page=10&sort=created_at');
+            const res = await fetchWithAuth('http://localhost:8000/api/posts?per_page=10&sort=created_at');
             const result = await res.json();
             if (result.success) {
                 setRecentPosts(result.data);
@@ -172,7 +172,7 @@ const CoffeeBlogInterface = () => {
         if (!token) return message.warning('Vui lòng đăng nhập để thả tim');
 
         try {
-            const res = await fetch(`https://smartbook.io.vn/api/posts/${postId}/like`, {
+            const res = await fetch(`http://localhost:8000/api/posts/${postId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -192,7 +192,7 @@ const CoffeeBlogInterface = () => {
     const handleClick = (slug, id) => {
         const viewedKey = `viewed_${slug}`;
         if (!sessionStorage.getItem(viewedKey)) {
-            fetch(`https://smartbook.io.vn/api/posts/${slug}/view`, { method: 'POST' });
+            fetch(`http://localhost:8000/api/posts/${slug}/view`, { method: 'POST' });
             sessionStorage.setItem(viewedKey, 'true');
         }
         localStorage.setItem('postid', id);

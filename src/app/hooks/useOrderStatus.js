@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
 const fetchOrderStatus = async (orderId, token) => {
-    const response = await fetch(`https://smartbook.io.vn/api/orders/${orderId}/sync-status`, {
+    const response = await fetch(`http://localhost:8000/api/orders/${orderId}/sync-status`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

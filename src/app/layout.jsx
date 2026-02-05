@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
 
         const intervalRef = setInterval(async () => {
             try {
-                const statusResponse = await axios.post('https://smartbook.io.vn/api/orders/zalopay/check-status', {
+                const statusResponse = await axios.post('http://localhost:8000/api/orders/zalopay/check-status', {
                     app_trans_id: appTransId,
                 });
 

@@ -92,7 +92,7 @@ export const CartProvider = ({ children }) => {
             fetchingRef.current = true;
             if (showLoading) setLoading(true);
 
-            const response = await fetch('https://smartbook.io.vn/api/cart', {
+            const response = await fetch('http://localhost:8000/api/cart', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ export const CartProvider = ({ children }) => {
             }
 
             try {
-                const response = await fetch('https://smartbook.io.vn/api/cart/add', {
+                const response = await fetch('http://localhost:8000/api/cart/add', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -205,7 +205,7 @@ export const CartProvider = ({ children }) => {
             setUpdatingItems((prev) => new Set([...prev, itemId]));
 
             try {
-                const response = await fetch(`https://smartbook.io.vn/api/cart/item/${itemId}`, {
+                const response = await fetch(`http://localhost:8000/api/cart/item/${itemId}`, {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -262,7 +262,7 @@ export const CartProvider = ({ children }) => {
         async (itemIds) => {
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('https://smartbook.io.vn/api/cart/remove', {
+                const response = await fetch('http://localhost:8000/api/cart/remove', {
                     method: 'POST',
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -319,7 +319,7 @@ export const CartProvider = ({ children }) => {
         try {
             console.log('🧹 Clearing cart...');
 
-            const response = await fetch('https://smartbook.io.vn/api/cart/clear', {
+            const response = await fetch('http://localhost:8000/api/cart/clear', {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -383,7 +383,7 @@ export const CartProvider = ({ children }) => {
         try {
             console.log('🧹 Clearing selected items:', selectedItems);
 
-            const response = await fetch('https://smartbook.io.vn/api/cart/remove', {
+            const response = await fetch('http://localhost:8000/api/cart/remove', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,

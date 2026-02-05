@@ -1,6 +1,6 @@
 export async function getPosts() {
     try {
-        const response = await fetch('https://smartbook.io.vn/api/posts', {
+        const response = await fetch('http://localhost:8000/api/posts', {
             cache: 'no-store',
         });
 

@@ -2,7 +2,7 @@ import { message } from 'antd';
 import useSWR from 'swr';
 
 const fetchFavoriteBooks = async (token) => {
-    const response = await fetch('https://smartbook.io.vn/api/books/followed', {
+    const response = await fetch('http://localhost:8000/api/books/followed', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

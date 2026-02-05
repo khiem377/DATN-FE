@@ -669,7 +669,7 @@ const SearchContent = () => {
 
     const loadPublishers = async () => {
         try {
-            const response = await fetch('https://smartbook.io.vn/api/publisher');
+            const response = await fetch('http://localhost:8000/api/publisher');
             const data = await response.json();
             if (data.status) setPublishers(data.data);
         } catch (error) {
@@ -693,7 +693,7 @@ const SearchContent = () => {
             params.page = currentPage;
             params.limit = pageSize;
 
-            const response = await axios.get('https://smartbook.io.vn/api/books/search', { params });
+            const response = await axios.get('http://localhost:8000/api/books/search', { params });
             if (response.data.status === 'success') {
                 setBooks(response.data.data);
                 if (response.data.pagination) setPagination(response.data.pagination);

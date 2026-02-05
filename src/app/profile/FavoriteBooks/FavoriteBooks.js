@@ -208,7 +208,7 @@ const FavoriteBooks = ({ enabled, token }) => {
 
             try {
                 setLoading(true);
-                const response = await fetch('https://smartbook.io.vn/api/books/followed', {
+                const response = await fetch('http://localhost:8000/api/books/followed', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
