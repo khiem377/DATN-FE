@@ -28,14 +28,19 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 const { Title, Text } = Typography;
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = 'https://smartbook-backend.tranminhdang.cloud';
 
 const formatVND = (n) =>
     new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(n ?? 0);
 
 const authHeaders = () => {
+    if (typeof window === 'undefined') {
+        return { 'Content-Type': 'application/json', Accept: 'application/json' };
+    }
+
     const token =
         localStorage.getItem('auth_token') || localStorage.getItem('access_token') || localStorage.getItem('token');
+
     const h = { 'Content-Type': 'application/json', Accept: 'application/json' };
     if (token) h.Authorization = `Bearer ${token}`;
     return h;
@@ -63,6 +68,7 @@ export default function CheckoutSplitPage() {
 
     // init
     useEffect(() => {
+        if (typeof window === 'undefined') return;
         const qToken = sp.get('token') || localStorage.getItem('group_cart_token') || '';
         const qGW = (sp.get('gateway') || 'momo').toLowerCase();
         const gw = qGW === 'vnpay' ? 'vnpay' : 'momo';
